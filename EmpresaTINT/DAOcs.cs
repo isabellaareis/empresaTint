@@ -17,6 +17,7 @@ namespace EmpresaTINT
         public string[] telefone;
         public string[] endereco;
         public int i;
+        public int contador;
 
         public DAOcs()
         {
@@ -24,7 +25,7 @@ namespace EmpresaTINT
             try
             {
                 conexao.Open();//tentando conectar
-                MessageBox.Show("Conectado!!!");
+               
 
 
 
@@ -62,6 +63,7 @@ namespace EmpresaTINT
             MySqlDataReader leitura = Sql.ExecuteReader();
 
             i = 0;//instanciando o contador
+            contador = 0;
             while (leitura.Read())
             {
 
@@ -70,11 +72,83 @@ namespace EmpresaTINT
                 telefone[i] = leitura["telefone"] + "";
                 endereco[i] = leitura["endereco"] + "";
                 i++;//contador gira
+                contador++;//conta quantos dados preenchem o vetor
             }//fim do while
 
             //encerrar processo de leitura
             leitura.Close();
         }//fim do método
+
+
+
+
+        public int ConsultarPorCodigo(int cod)
+        {
+            preeencherVetor();//preenchendo o vetor com o sdados do banco
+
+            i = 0;//instanciando o contador
+            while (i < quantidadeDeDados())
+            {
+                if (codigo[i] == cod)
+                {
+                    return i;
+                }
+                i++;//contador gira
+            }//fim do while
+            return -1;
+        }//fim do método
+
+        public string RetornarNome(int cod)
+        {
+            int posicao = ConsultarPorCodigo(cod);
+            if(posicao > -1)
+            {
+                return nome[posicao];
+            }
+            return "Código digitado não é válido";
+        }//fim retornar nome
+
+        public string RetornarTelefone(int cod)
+        {
+            int posicao = ConsultarPorCodigo(cod);
+            if (posicao > -1)
+            {
+                return telefone[posicao];
+            }
+            return "Código digitado não é válido";
+        }//fim retornar telefone
+
+        public string RetornarEndereco(int cod)
+        {
+            int posicao = ConsultarPorCodigo(cod);
+            if (posicao > -1)
+            {
+                return endereco[posicao];
+            }
+            return "Código digitado não é válido";
+        }//fim retornar endereço
+
+        public int quantidadeDeDados()
+        {
+            return contador;
+        }//fim qntd de dados
+
+
+        public string Atualizar(int codigo, string campo, string dado)
+        {
+            string query = $"update pessoa set {campo} = '{dado}' where codigo = '{codigo}'";
+            MySqlCommand sql = new MySqlCommand(query, conexao);
+            string resultado = sql.ExecuteNonQuery() + "Atualizado!";
+            return resultado;
+        }//fim metodo atualizar
+
+        public string Excluir(int codigo)
+        {
+            string query = $"delete from pessoa where codigo = '{codigo}'";
+            MySqlCommand sql = new MySqlCommand(query, conexao);
+            string resultado = sql.ExecuteNonQuery() + " Deletado";
+            return resultado;
+        }
 
        
     }//fim da classe

@@ -12,9 +12,14 @@ namespace EmpresaTINT
 {
     public partial class Consultar : Form
     {
+        DAOcs consul;
         public Consultar()
         {
+            consul = new DAOcs();
             InitializeComponent();
+            configurarDataGrid();//configura a estrutura da coluna e linhas
+            nomeColunas();//nomeando as colunas
+            adicionardados();//adicionando os dados para vizualizar
         }
 
         private void TINT01_Click(object sender, EventArgs e)
@@ -27,49 +32,39 @@ namespace EmpresaTINT
             this.Close();
         }//fim do voltar
 
-        private void label1_Click(object sender, EventArgs e)
+        public void nomeColunas()
+        {
+            dataGridView1.Columns[0].Name = "Código";
+            dataGridView1.Columns[1].Name = "Nome";
+            dataGridView1.Columns[2].Name = "Telefone";
+            dataGridView1.Columns[3].Name = "Endereço";
+        }//fim nome colunas
+
+        public void configurarDataGrid()
+        {
+            dataGridView1.AllowUserToAddRows = false;//nao pode adicionar linhas
+            dataGridView1.AllowUserToDeleteRows = false;//nao pode apagar linhas
+            dataGridView1.AllowUserToResizeColumns = false;//nao pode redirecionar as colunas
+            dataGridView1.AllowUserToResizeRows = false;//nao pode redirecionar linhas
+
+            dataGridView1.ColumnCount = 4;//total de colunas que tem
+        }//fim do configurarr data grid
+
+        public void adicionardados()
+        {
+            consul.preeencherVetor();//preencher os vetores com dados do banco
+            for(int i= 0; i < consul.quantidadeDeDados(); i++)
+            {
+                dataGridView1.Rows.Add(consul.codigo[i], consul.nome[i], consul.telefone[i], consul.endereco[i]);
+            }//fim do for
+
+        }//fim do adicionar dados
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
-        }//fim do title codigo
+        }//fim do data grid view
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }//fim do campo codigo
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }//fim do title nome
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }//fim do campo nome
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }//fim do title telefone
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }//fim do campo telefone
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }//fim do title endereco
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }//fim do campo endereco
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }//fim btn consultar
+       
     }
 }

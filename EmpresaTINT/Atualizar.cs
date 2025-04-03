@@ -12,9 +12,15 @@ namespace EmpresaTINT
 {
     public partial class Atualizar : Form
     {
+        DAOcs atu;
         public Atualizar()
         {
+            atu = new DAOcs();
             InitializeComponent();
+            textBox1.ReadOnly = false;
+            textBox3.ReadOnly = true;
+            textBox2.ReadOnly = true;
+            textBox4.ReadOnly = true;
         }
 
         private void TINT01_Click(object sender, EventArgs e)
@@ -68,9 +74,42 @@ namespace EmpresaTINT
         }//fim do atualizar
 
         private void button1_Click(object sender, EventArgs e)
-        {
+        { 
+            int codigo = Convert.ToInt32(textBox1.Text);
+            string nome = textBox3.Text;
+            string telefone = textBox2.Text;
+            string endereco = textBox4.Text;
 
+            atu.Atualizar(codigo, "nome", nome);
+            atu.Atualizar(codigo, "telefone", telefone);
+            atu.Atualizar(codigo, "endereco", endereco);
+            MessageBox.Show("Dados atualizado com sucesso!");
+            this.Close();
         }//fim do btn atualizar
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if(textBox1.Text == ""){
+                textBox3.Text = "Informe o código";
+                textBox2.Text = "Informe o código";
+                textBox4.Text = "Informe o código";
+            }
+            else
+            {
+                int codigo = Convert.ToInt32(textBox1.Text);//coletando
+
+                textBox3.Text = atu.RetornarNome(codigo);//preenchendo o campo nome
+                textBox2.Text = atu.RetornarTelefone(codigo);//preenchendo o campo telefone
+                textBox4.Text = atu.RetornarEndereco(codigo);//preenchendo o campo endereco
+
+                textBox1.ReadOnly = true;
+                textBox3.ReadOnly = false;
+                textBox2.ReadOnly = false;
+                textBox4.ReadOnly = false;
+            }
+
+           
+        }//fim do btn buscar
     }
 }
 
